@@ -5,12 +5,10 @@ output: html_notebook
 
 
 ```{r}
-library(readr)
+library(tidyverse)
 hockey_data_2_ <- read_csv("~/Survey group project/hockey_data (2).csv")
 df<-hockey_data_2_
 ```
-
-
 
 ```{r}
 creat_west_column<-function(df){
@@ -45,10 +43,20 @@ write.csv(x=hockey_data_west,file="hockey_data_west.csv")
 
 ```
 
-
 ```{r}
 check<- read_csv("~/Survey group project/hockey_data_west.csv")
  
 ```
 
+```{r standardize everything as per-60}
+per_60 <- function(x, na.rm=TRUE) ((x/hockey$toi)*60)
+
+hockey <- read_csv("hockey_data_west_east.csv")
+
+hockey <- hockey %>% 
+  select(game, team, toi, contains("per"), everything()) %>% 
+  mutate_at(vars(cf:ldga), list(per_60=per_60))
+
+write.csv(x=hockey,file="hockey_data.csv")
+```
 
