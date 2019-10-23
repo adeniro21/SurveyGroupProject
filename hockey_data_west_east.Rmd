@@ -9,16 +9,6 @@ library(readr)
 hockey_data_2_ <- read_csv("~/Survey group project/hockey_data (2).csv")
 df<-hockey_data_2_
 ```
-```{r}
-cont_rating_degree<-function(df){
-    df %>% 
-    mutate(cont_rating_degree = case_when(
-      cont_rating <= 6 ~ "Low",
-      cont_rating <= 12 ~"Normal",
-      TRUE ~ "High"
-    ))
-}
-```
 
 
 
