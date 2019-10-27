@@ -1,0 +1,106 @@
+---
+title: "michael-exploration"
+output: html_notebook
+---
+
+```{r}
+install.packages("MuMIn")
+library(MuMIn)
+library(tidyverse)
+names(hockey)
+```
+
+```{r}
+lm1 <- lm(gf_per_60 ~ hdsf_per_60 + mdsf_per_60 + ldsf_per_60 + sh_per, data = hockey, na.action=na.fail)
+dredge(lm1, rank = AICc)
+```
+
+```{r}
+lm2 <- lm(ga_per_60 ~ hdsf_per_60 + mdsf_per_60 + ldsf_per_60, data=hockey, na.action=na.fail)
+dredge(lm2, rank = AICc)
+```
+
+```{r}
+lm3 <- lm(gf_per_60~ldcf_per_60, data=hockey)
+plot(gf_per_60~ldcf_per_60, data=hockey)
+abline(lm3)
+
+lm4 <- lm(gf_per_60~hdcf_per_60, data=hockey)
+plot(gf_per_60~hdcf_per_60, data=hockey)
+abline(lm4)
+
+lm5 <- lm(gf_per_60~hdsh_per, data=hockey)
+plot(gf_per_60~ldsh_per, data=hockey)
+abline(lm5)
+```
+
+```{r warning = F}
+hockey_team <- hockey %>% 
+  group_by(team) %>% 
+  summarize(gf_60_avg = mean(gf_per_60),
+            ga_60_avg = mean(ga_per_60),
+            hdcf_60_avg = mean(hdcf_per_60),
+            mdcf_60_avg = mean(mdcf_per_60),
+            ldcf_60_avg = mean(ldcf_per_60),
+            hdca_60_avg = mean(hdca_per_60),
+            mdca_60_avg = mean(mdca_per_60),
+            ldca_60_avg = mean(ldca_per_60))
+```
+
+```{r warning = FALSE}
+lmhd <- lm(gf_60_avg~hdcf_60_avg, data=hockey_team)
+lmmd <- lm(gf_60_avg~mdcf_60_avg, data=hockey_team)
+lmld <- lm(gf_60_avg~ldcf_60_avg, data=hockey_team)
+lb1 <- paste("R^2 == ", signif(summary(lmhd)$r.squared, digits=2))
+lb2 <- paste("R^2 == ", signif(summary(lmmd)$r.squared, digits=2))
+lb3 <- paste("R^2 == ", signif(summary(lmld)$r.squared, digits=1))
+
+ggplot(data = hockey_team, aes(x=hdcf_60_avg, y=gf_60_avg))+
+  geom_point(col = "red")+
+  geom_point(aes(x = mdcf_60_avg, y = gf_60_avg), col="blue")+
+  geom_point(aes(x = ldcf_60_avg, y = gf_60_avg), col="gray25")+
+  scale_y_continuous(limits=c(2,2.8))+
+  scale_x_continuous(limits=c(9,31))+
+  geom_smooth(aes(x=hdcf_60_avg, y=gf_60_avg),method=lm, se=FALSE, col="black")+
+  geom_smooth(aes(x=mdcf_60_avg, y=gf_60_avg),method=lm, se=FALSE, col="black")+
+  geom_smooth(aes(x=ldcf_60_avg, y=gf_60_avg),method=lm, se=FALSE, col="black")+
+  ylab("Goals for per 60 minutes")+
+  xlab("Chances for per 60 minutes")+
+  annotate("text", x = 12.6, y = 2.61, label = lb1, parse=TRUE)+
+  annotate("text", x = 19.5, y = 2.7, label = lb2, parse=TRUE)+
+  annotate("text", x = 27.5, y = 2.4, label = lb3, parse=TRUE)+
+  theme_classic()+
+  theme(axis.title=element_text(size=14,face="bold"))+
+  annotate("text", x = 30.5, y=2.7, label="High-danger", col="red")+
+  annotate("text", x = 30.37, y=2.65, label="Mid-danger", col="blue")+
+  annotate("text", x = 30.45, y=2.6, label="Low-danger", col="gray25")
+```
+
+```{r}
+ggplot(data = hockey_team, aes(x=hdcf_60_avg, y=ga_60_avg))+
+  geom_point(col = "red")+
+  geom_point(aes(x = mdcf_60_avg, y = ga_60_avg), col="blue")+
+  geom_point(aes(x = ldcf_60_avg, y = ga_60_avg), col="green")+
+  scale_y_continuous(limits=c(2,3))+
+  geom_smooth(aes(x=hdcf_60_avg, y=ga_60_avg),method=lm, se=FALSE, col="black")+
+  geom_smooth(aes(x=mdcf_60_avg, y=ga_60_avg),method=lm, se=FALSE, col="black")+
+  geom_smooth(aes(x=ldcf_60_avg, y=ga_60_avg),method=lm, se=FALSE, col="black")+
+  ylab("Goals allowed per 60")+
+  xlab("Chances for per 60")+
+  theme_classic()
+```
+
+```{r}
+ggplot(data = hockey_team, aes(x=hdca_60_avg, y=ga_60_avg))+
+  geom_point(col = "red")+
+  geom_point(aes(x = mdca_60_avg, y = ga_60_avg), col="blue")+
+  geom_point(aes(x = ldca_60_avg, y = ga_60_avg), col="green")+
+  scale_y_continuous(limits=c(2,3))+
+  geom_smooth(aes(x=hdca_60_avg, y=ga_60_avg),method=lm, se=FALSE, col="black")+
+  geom_smooth(aes(x=mdca_60_avg, y=ga_60_avg),method=lm, se=FALSE, col="black")+
+  geom_smooth(aes(x=ldca_60_avg, y=ga_60_avg),method=lm, se=FALSE, col="black")+
+  ylab("Goals allowed per 60")+
+  xlab("Chances allowed per 60")+
+  theme_classic()
+```
+
