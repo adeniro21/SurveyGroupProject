@@ -1,0 +1,65 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(lubridate)
+```
+
+```{r}
+library(readr)
+hockey_data <- read_csv("hockey_data.csv")
+```
+```{r}
+hockey_data_west_east <- read_csv("hockey_data_west_east.csv")
+```
+```{r}
+hockey_data3_score_matched_to_team <- read_csv("hockey_data3_score_matched_to_team.csv")
+```
+
+
+```{r}
+mean_cf<-hockey_data3_score_matched_to_team %>% 
+  group_by(west_or_east) %>% 
+  summarise(mean_hdcf_60=mean(hdcf_per_60),mean_mdcf_per=mean(mdcf_per_60),mean_ldcf_per_60=mean(ldcf_per_60))
+mean_cf
+```
+感觉没有明显差异 在东西部方面对于这些数据在数据上  如果这种情况怎么分析 
+
+
+# change the data and leave only year unit into dataset
+```{r}
+hockey_data3_score_matched_to_team$date <- format(as.Date(hockey_data3_score_matched_to_team$date), "%Y")
+```
+
+```{r}
+# calculate
+hockey_data3_score_matched_to_team %>% 
+  filter(date==2016) %>% 
+  group_by(west_or_east) %>% 
+  summarise(mean_hdcf_60=mean(hdcf_per_60),mean_mdcf_per=mean(mdcf_per_60),mean_ldcf_per_60=mean(ldcf_per_60))
+
+hockey_data3_score_matched_to_team %>% 
+  filter(date==2017) %>% 
+  group_by(west_or_east) %>% 
+  summarise(mean_hdcf_60=mean(hdcf_per_60),mean_mdcf_per=mean(mdcf_per_60),mean_ldcf_per_60=mean(ldcf_per_60)) 
+
+hockey_data3_score_matched_to_team %>% 
+  filter(date==2018) %>% 
+  group_by(west_or_east) %>% 
+  summarise(mean_hdcf_60=mean(hdcf_per_60),mean_mdcf_per=mean(mdcf_per_60),mean_ldcf_per_60=mean(ldcf_per_60))
+
+hockey_data3_score_matched_to_team %>% 
+  filter(date==2019) %>% 
+  group_by(west_or_east) %>% 
+  summarise(mean_hdcf_60=mean(hdcf_per_60),mean_mdcf_per=mean(mdcf_per_60),mean_ldcf_per_60=mean(ldcf_per_60))
+
+```
+
+
+```{r}
+
+```
+
