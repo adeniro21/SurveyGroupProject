@@ -1,0 +1,96 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(lubridate)
+```
+
+```{r}
+library(readr)
+hockey_data <- read_csv("hockey_data.csv")
+```
+```{r}
+hockey_data_west_east <- read_csv("hockey_data_west_east.csv")
+```
+```{r}
+hockey_data3_score_matched_to_team <- read_csv("hockey_data3_score_matched_to_team.csv")
+```
+
+
+```{r}
+mean_cf<-hockey_data3_score_matched_to_team %>% 
+  group_by(west_or_east) %>% 
+  summarise(mean_hdcf_60=mean(hdcf_per_60),mean_mdcf_per=mean(mdcf_per_60),mean_ldcf_per_60=mean(ldcf_per_60))
+mean_cf
+```
+Feel not distinct difference between east and west 
+
+
+
+
+# change the data and leave only year unit into dataset
+```{r}
+hockey_data3_score_matched_to_team$date <- format(as.Date(hockey_data3_score_matched_to_team$date), "%Y-%m")
+```
+
+```{r}
+b<-hockey_data3_score_matched_to_team %>%
+  filter(date>='2016-11'& date<='2017-05')
+b
+```
+
+```{r}
+# calculate
+hockey_data3_score_matched_to_team %>% 
+  filter(date==2016) %>% 
+  group_by(west_or_east) %>% 
+  summarise(mean_hdcf_60=mean(hdcf_per_60),mean_mdcf_per=mean(mdcf_per_60),mean_ldcf_per_60=mean(ldcf_per_60))
+
+hockey_data3_score_matched_to_team %>% 
+  filter(date==2017) %>% 
+  group_by(west_or_east) %>% 
+  summarise(mean_hdcf_60=mean(hdcf_per_60),mean_mdcf_per=mean(mdcf_per_60),mean_ldcf_per_60=mean(ldcf_per_60)) 
+
+hockey_data3_score_matched_to_team %>% 
+  filter(date==2018) %>% 
+  group_by(west_or_east) %>% 
+  summarise(mean_hdcf_60=mean(hdcf_per_60),mean_mdcf_per=mean(mdcf_per_60),mean_ldcf_per_60=mean(ldcf_per_60))
+
+hockey_data3_score_matched_to_team %>% 
+  filter(date==2019) %>% 
+  group_by(west_or_east) %>% 
+  summarise(mean_hdcf_60=mean(hdcf_per_60),mean_mdcf_per=mean(mdcf_per_60),mean_ldcf_per_60=mean(ldcf_per_60))
+
+```
+
+2016-2017 season (October 2016 - May 2017)
+2017-2018 season (October 2017 - May 2018)
+2018-2019 season (October 2018 - May 2019)
+
+```{r}
+
+hockey_data3_score_matched_to_team %>% 
+  filter(date>='2016-11'& date<='2017-05') %>% 
+  group_by(west_or_east) %>% 
+  summarise(mean_hdcf_60=mean(hdcf_per_60),mean_mdcf_per=mean(mdcf_per_60),mean_ldcf_per_60=mean(ldcf_per_60))
+
+hockey_data3_score_matched_to_team %>% 
+  filter(date>='2017-11'& date<='2018-05') %>% 
+  group_by(west_or_east) %>% 
+  summarise(mean_hdcf_60=mean(hdcf_per_60),mean_mdcf_per=mean(mdcf_per_60),mean_ldcf_per_60=mean(ldcf_per_60)) 
+
+hockey_data3_score_matched_to_team %>% 
+  filter(date>='2018-11'& date<='2019-05') %>% 
+  group_by(west_or_east) %>% 
+  summarise(mean_hdcf_60=mean(hdcf_per_60),mean_mdcf_per=mean(mdcf_per_60),mean_ldcf_per_60=mean(ldcf_per_60))
+
+```
+
+
+```{r}
+
+```
+
