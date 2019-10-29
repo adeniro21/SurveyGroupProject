@@ -10,7 +10,7 @@ library(readr)
 hockey_data <- read_csv("hockey_data.csv")
 View(hockey_data)
 
-hockey_data3_score <- read_csv("hockey_data3_score_matched_to_team.csv")
+hockey_data3_score <- read_csv("qianyi_score_matched_to_team.csv")
 View(hockey_data3_score)
 ```
 
