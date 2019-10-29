@@ -2,7 +2,7 @@
 title: "R Notebook"
 output: html_notebook
 editor_options: 
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
 ```{r}
@@ -73,21 +73,23 @@ shooting percentages
 ```{r}
 df_win %>%
   ggplot(aes(sh_per)) +
-  geom_histogram(aes(y = ..density..), binwidth = 2, colour = "black", fill = "white") +
+  geom_histogram(aes(y = ..density..), binwidth = 2, colour = "black", fill = "grey") +
   geom_density(fill = "blue", alpha = 0.3) +
   geom_vline(aes(xintercept = mean(sh_per, na.rm = T)),
              colour = "red", linetype ="longdash", size = .8) +
   scale_x_continuous(breaks = seq(0, 40, 5), labels = function(x){paste0(x, "%")}) +
-  labs(x = "Shooting Percentage", y = "Density" , title = "Shooting Percentage in a Team Win")
+  labs(x = "Shooting Percentage", y = "Density" , title = "Shooting Percentage in a Team Win") +
+  theme_classic()
 
 df_lose %>%
   ggplot(aes(sh_per)) +
-  geom_histogram(aes(y = ..density..), binwidth = 2, colour = "black", fill = "white") +
+  geom_histogram(aes(y = ..density..), binwidth = 2, colour = "black", fill = "grey") +
   geom_density(fill = "red", alpha = 0.3) +
   geom_vline(aes(xintercept = mean(sh_per, na.rm = T)),
              colour = "blue", linetype ="longdash", size = .8) +
   scale_x_continuous(breaks = seq(0, 30, 5), labels = function(x){paste0(x, "%")}) +
-  labs(x = "Shooting Percentage", y = "Density" , title = "Shooting Percentage in a Team Loss")
+  labs(x = "Shooting Percentage", y = "Density" , title = "Shooting Percentage in a Team Loss") +
+  theme_classic()
 
 mean(df_win$sh_per) - mean(df_lose$sh_per)
 ```
@@ -98,21 +100,23 @@ df_lose$hdsh_per <- as.numeric(df_lose$hdsh_per)
 
 df_win %>%
   ggplot(aes(hdsh_per)) +
-  geom_histogram(aes(y = ..density..), binwidth = 2, colour = "black", fill = "white") +
+  geom_histogram(aes(y = ..density..), binwidth = 4, colour = "black", fill = "grey") +
   geom_density(fill = "blue", alpha = 0.3) +
   geom_vline(aes(xintercept = mean(hdsh_per, na.rm = T)),
              colour = "red", linetype ="longdash", size = .8) +
-  scale_x_continuous(breaks = seq(0, 100, 10), labels = function(x){paste0(x, "%")}) +
-  labs(x = "High Danger Shooting Percentage", y = "Density" , title = " High Danger Shooting Percentage in a Team Win")
+  scale_x_continuous(breaks = seq(0, 80, 10), labels = function(x){paste0(x, "%")}, limits = c(-5, 80)) +
+  labs(x = "High Danger Shooting Percentage", y = "Density" , title = " High Danger Shooting Percentage in a Team Win") +
+  theme_classic()
 
 df_lose %>%
   ggplot(aes(hdsh_per)) +
-  geom_histogram(aes(y = ..density..), binwidth = 2, colour = "black", fill = "white") +
+  geom_histogram(aes(y = ..density..), binwidth = 4, colour = "black", fill = "grey") +
   geom_density(fill = "red", alpha = 0.3) +
   geom_vline(aes(xintercept = mean(hdsh_per, na.rm = T)),
              colour = "blue", linetype ="longdash", size = .8) +
-  scale_x_continuous(breaks = seq(0, 100, 10), labels = function(x){paste0(x, "%")}) +
-  labs(x = "High Danger Shooting Percentage", y = "Density" , title = "High Danger Shooting Percentage in a Team Loss")
+  scale_x_continuous(breaks = seq(0, 80, 10), labels = function(x){paste0(x, "%")}, limits = c(-5,80)) +
+  labs(x = "High Danger Shooting Percentage", y = "Density" , title = "High Danger Shooting Percentage in a Team Loss") +
+  theme_classic()
 
 which(is.na(df_win$hdsh_per))
 mean(df_win$hdsh_per, na.rm = T) - mean(df_lose$hdsh_per, na.rm = T)
@@ -202,21 +206,23 @@ Shots on goal
 ```{r}
 df_win %>%
   ggplot(aes(sf_per_60)) +
-  geom_histogram(aes(y = ..density..), binwidth = 2, colour = "black", fill = "white") +
+  geom_histogram(aes(y = ..density..), binwidth = 3, colour = "black", fill = "grey") +
   geom_density(fill = "blue", alpha = 0.3) +
   geom_vline(aes(xintercept = mean(sf_per_60, na.rm = T)),
              colour = "red", linetype ="longdash", size = .8) +
   scale_x_continuous(breaks = seq(0, 70, 10)) +
-  labs(x = "Shots For Per 60 Minutes", y = "Density" , title = "Shots For per 60 in a Team Win")
+  labs(x = "Shot Attempts Per 60 Minutes", y = "Density" , title = "Shot Attempts Per 60 Minutes in a Team Win") +
+  theme_classic()
 
 df_lose %>%
   ggplot(aes(sf_per_60)) +
-  geom_histogram(aes(y = ..density..), binwidth = 2, colour = "black", fill = "white") +
+  geom_histogram(aes(y = ..density..), binwidth = 3, colour = "black", fill = "grey") +
   geom_density(fill = "red", alpha = 0.3) +
   geom_vline(aes(xintercept = mean(sf_per_60, na.rm = T)),
              colour = "blue", linetype ="longdash", size = .8) +
   scale_x_continuous(breaks = seq(0, 70, 10)) +
-  labs(x = "Shots For Per 60 Minutes", y = "Density" , title = "Shot For per 60 in a Team Loss")
+  labs(x = "Shot Attempts Per 60 Minutes", y = "Density" , title = "Shot Attempts Per 60 Minutes in a Team Loss") +
+  theme_classic()
 
 mean(df_win$sf_per_60)
 mean(df_lose$sf_per_60)
@@ -226,21 +232,23 @@ high danger shot attempts
 ```{r}
 df_win %>%
   ggplot(aes(hdsf_per_60)) +
-  geom_histogram(aes(y = ..density..), binwidth = 2, colour = "black", fill = "white") +
+  geom_histogram(aes(y = ..density..), binwidth = 2, colour = "black", fill = "grey") +
   geom_density(fill = "blue", alpha = 0.3) +
   geom_vline(aes(xintercept = mean(hdsf_per_60, na.rm = T)),
              colour = "red", linetype ="longdash", size = .8) +
-  scale_x_continuous(breaks = seq(0, 21, 3)) +
-  labs(x = "High Danger Shots For Per 60 Minutes", y = "Density" , title = "High Danger Shots For per 60 in a Team Win")
+  scale_x_continuous(breaks = seq(0, 24, 3)) +
+  labs(x = "High Danger Shot Attempts Per 60 Minutes", y = "Density" , title = "High Danger Shot Attempts Per 60 in a Team Win") +
+  theme_classic()
 
 df_lose %>%
   ggplot(aes(hdsf_per_60)) +
-  geom_histogram(aes(y = ..density..), binwidth = 2, colour = "black", fill = "white") +
+  geom_histogram(aes(y = ..density..), binwidth = 2, colour = "black", fill = "grey") +
   geom_density(fill = "red", alpha = 0.3) +
   geom_vline(aes(xintercept = mean(hdsf_per_60, na.rm = T)),
              colour = "blue", linetype ="longdash", size = .8) +
-  scale_x_continuous(breaks = seq(0, 21, 3)) +
-  labs(x = "High Danger Shots For Per 60 Minutes", y = "Density" , title = "High Danger Shots For per 60 in a Team Loss")
+  scale_x_continuous(breaks = seq(0, 24, 3)) +
+  labs(x = "High Danger Shot Attempts Per 60 Minutes", y = "Density" , title = "High Danger Shot Attempts Per 60 in a Team Loss") +
+  theme_classic()
 
 mean(df_win$hdsf_per_60)
 mean(df_lose$hdsf_per_60)
