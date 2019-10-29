@@ -1,0 +1,51 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(readr)
+hockey_data <- read_csv("hockey_data.csv")
+View(hockey_data)
+
+hockey_data3_score <- read_csv("hockey_data3_score_matched_to_team.csv")
+View(hockey_data3_score)
+```
+
+creating outcome, win/loss variable
+```{r}
+hockey_data3_score$outcome <- NA_integer_
+
+for(i in 1:7544)
+{
+  if(i %% 2 != 0)
+  {
+    if(hockey_data3_score$score_matched_to_team[[i]] > hockey_data3_score$score_matched_to_team[[i + 1]])
+    {
+      hockey_data3_score$outcome[[i]] = 1
+      hockey_data3_score$outcome[[(i + 1)]] = 0
+    }
+    else
+    {
+      hockey_data3_score$outcome[[i]] = 0
+      hockey_data3_score$outcome[[(i + 1)]] = 1
+    }
+  }
+}
+```
+
+
+```{r}
+install.packages("corrplot")
+library(corrplot)
+correlations <- cor(hockey_data3_score$outcome ,hockey_data3_score[,c(47,48,50:79)])
+corrplot(correlations, method="circle")
+correlations
+```
+
+```{r}
+glm.fit <- glm(outcome ~ pdo, data = hockey_data3_score)
+summary(glm.fit)
+plot(glm.fit)
+```
+
